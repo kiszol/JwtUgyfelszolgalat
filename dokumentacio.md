@@ -1,9 +1,9 @@
-# Customer Support Ticket REST API megvalósítása Laravel + JWT környezetben
+# Ügyfélszolgálati jegykezelő rendzser JWT - Dokumentáció
 
 **base_url:**  
 `http://127.0.0.1:8000/api`
 
-Az API egy egyszerű ügyfélszolgálati jegykezelő rendszert valósít meg. A backend célja a felhasználók, ticketek és ticket válaszok kezelése, valamint a felhasználói authentikáció JWT alapú Bearer token védelemmel. A struktúra és a dokumentáció felépítése a Payment Platform REST API példához hasonló.
+Egy egyszerű ügyfélszolgálati jegykezelő rendszer. A backend célja a felhasználók, ticketek és ticket válaszok kezelése, valamint a felhasználói authentikáció JWT alapú token védelemmel.
 
 **Funkciók:**
 
@@ -26,7 +26,7 @@ Kapcsolatok:
 - Egy tickethez több válasz tartozhat
 - Minden válasz egy tickethez és egy felhasználóhoz kapcsolódik  
 
-Az adatbázis MySQL-t használ, Laravel migrációkkal felépítve, foreign key megkötésekkel biztosítva az adatintegritást, hasonlóan a payment példához.
+Az adatbázis MySQL-t használ, Laravel migrációkkal felépítve, foreign key megkötésekkel biztosítva az adatintegritást.
 
 ### Users tábla
 
@@ -175,8 +175,9 @@ class Ticket extends Model
         return $this->hasMany(TicketReply::class);
     }
 }
-TicketReply model (app/Models/TicketReply.php)
-php
+```
+## TicketReply model (app/Models/TicketReply.php)
+```bash
 <?php
 
 namespace App\Models;
@@ -1273,5 +1274,6 @@ class TicketTest extends TestCase
 ```bash
 php artisan test
 ```
+
 
 
