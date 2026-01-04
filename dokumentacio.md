@@ -225,41 +225,23 @@ A Content-Type és az Accept header kulcsok mindig application/json formátumúa
   "message": "Unauthenticated."
 }
 ```
-# Nem védett végpontok
+# Nem védett végpontok:
 ---
-|GET |/ping – API teszteléshez
-|POST |/register – Regisztrációhoz
-|POST |/login – Bejelentkezéshez (JWT token generálása)
-# Védett végpontok 
-|POST |/logout – Kijelentkezés
-|GET |/me – Saját felhasználói adatok lekérése
-|GET |/tickets – Összes ticket listázása
-|POST /tickets |– Új ticket létrehozása
-|GET |/tickets/{id} – Egy ticket megtekintése a válaszokkal együtt
-|PUT/PATCH |/tickets/{id} – Ticket módosítása (pl. státusz, prioritás)
-|DELETE |/tickets/{id} – Ticket törlése (Soft Delete)
-|POST |/tickets/{id}/replies – Új válasz hozzáadása egy tickethez
+GET /ping – API teszteléshez
+POST /register – Regisztrációhoz
+POST /login – Bejelentkezéshez (JWT token generálása)
+# Védett végpontok: 
+POST /logout – Kijelentkezés
+GET /me – Saját felhasználói adatok lekérése
+GET /tickets – Összes ticket listázása
+POST /tickets – Új ticket létrehozása
+GET /tickets/{id} – Egy ticket megtekintése a válaszokkal együtt
+PUT/PATCH /tickets/{id} – Ticket módosítása (pl. státusz, prioritás)
+DELETE tickets/{id} – Ticket törlése (Soft Delete)
+POST tickets/{id}/replies – Új válasz hozzáadása egy tickethez
 
-Soft Delete funkciók
-A rendszer Soft Delete megközelítést használ a ticketek és ticket válaszok törlésekor, hasonlóan az orders/payments példához.
-
-A rekord fizikailag megmarad az adatbázisban
-
-A deleted_at mező kitöltésre kerül az aktuális időbélyeggel
-
-A lekérdezések alapértelmezetten nem tartalmazzák a törölt rekordokat
-
-A törölt rekordok később visszaállíthatók (restore()), ha erre építünk külön admin funkciókat
-
-Előnyök:
-
-Adatvédelem: Véletlen törlés esetén az adatok visszaállíthatók
-
-Audit trail: Nyomon követhető, mikor és milyen ticket/válasz került törlésre
-
-Compliance: Bizonyos szabályozások megkövetelik az auditálhatóságot
-
-Hibák
+## Hibák
+---
 400 Bad Request: Hibás formátumú kérés, pl. rossz JSON.
 
 401 Unauthorized: Nincs vagy érvénytelen Bearer token.
@@ -268,11 +250,13 @@ Hibák
 
 422 Unprocessable Entity: Validációs hiba (hiányzó vagy hibás mezők).
 
-Felhasználókezelés
-POST /register
-Új felhasználó regisztrációja. Az új felhasználók regisztráció után külön be kell jelentkezzenek token megszerzéséhez (JWT). A válasz hasonló felépítésű, mint a payment példában a regisztráció.
+## Felhasználókezelés
+---
+## POST /register
 
-Kérés törzse:
+## Új felhasználó regisztrációja. Az új felhasználók regisztráció után külön be kell jelentkezzenek token megszerzéséhez (JWT). A válasz hasonló felépítésű, mint a payment példában a regisztráció.
+
+# Kérés törzse:
 
 ```bash
 {
@@ -282,7 +266,7 @@ Kérés törzse:
   "password_confirmation": "password123"
 }
 ```
-Válasz (sikeres regisztráció – 201 Created):
+# Válasz (sikeres regisztráció – 201 Created):
 
 ```bash
 {
@@ -297,7 +281,7 @@ Válasz (sikeres regisztráció – 201 Created):
   }
 }
 ```
-Válasz (ha az e-mail cím már foglalt – 422 Unprocessable Entity):
+# Válasz (ha az e-mail cím már foglalt – 422 Unprocessable Entity):
 
 ```bash
 {
@@ -309,18 +293,18 @@ Válasz (ha az e-mail cím már foglalt – 422 Unprocessable Entity):
   }
 }
 ```
-POST /login
-Bejelentkezés e-mail címmel és jelszóval, JWT Bearer token megszerzése.
+## POST /login
 
-Kérés törzse:
+# Bejelentkezés e-mail címmel és jelszóval, JWT Bearer token megszerzése.
 
+# Kérés törzse:
 ```bash
 {
   "email": "admin@example.com",
   "password": "Admin_Secret_Pw2026!"
 }
 ```
-Válasz (sikeres bejelentkezés – 200 OK):
+# Válasz (sikeres bejelentkezés – 200 OK):
 
 ```bash
 {
@@ -338,7 +322,7 @@ Válasz (sikeres bejelentkezés – 200 OK):
   "expires_in": 3600
 }
 ```
-Válasz (sikertelen bejelentkezés – 422 Unprocessable Entity):
+# Válasz (sikertelen bejelentkezés – 422 Unprocessable Entity):
 
 ```bash
 {
@@ -350,24 +334,18 @@ Válasz (sikertelen bejelentkezés – 422 Unprocessable Entity):
   }
 }
 ```
-A további védett végpontoknál a kérés headerjében meg kell adni a tokent:
 
-http
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9....
-POST /logout
-A jelenlegi autentikált felhasználó kijelentkeztetése, a token érvénytelenítése.
-
-Válasz (sikeres kijelentkezés – 200 OK):
+# Válasz (sikeres kijelentkezés – 200 OK):
 
 ```bash
 {
   "message": "Logout successful"
 }
 ```
-GET /me
-Saját felhasználói profil lekérése.
+## GET /me
+## Saját felhasználói profil lekérése.
 
-Válasz (200 OK):
+# Válasz (200 OK):
 
 ```bash
 {
@@ -379,11 +357,10 @@ Válasz (200 OK):
   "updated_at": "2026-01-04T10:30:00.000000Z"
 }
 ```
-Ticket kezelés
-POST /tickets
-Új ticket létrehozása bejelentkezett felhasználó nevében. A user_id a backendben az auth alapján kerül beállításra.
+## Ticket kezelés
+## POST /tickets
 
-Kérés törzse:
+# Kérés törzse:
 
 ```bash
 {
@@ -392,7 +369,7 @@ Kérés törzse:
   "priority": "high"
 }
 ```
-Válasz (sikeres létrehozás – 201 Created):
+# Válasz (sikeres létrehozás – 201 Created):
 
 ```bash
 {
@@ -421,10 +398,10 @@ Hibák:
 
 401 Unauthorized – ha a token érvénytelen vagy hiányzik
 
-GET /tickets
-Az összes ticket listázása. (Alap esetben minden ticket; jogosultsági logika kiterjeszthető, pl. user csak a sajátját látja, admin mindent.)
+## GET /tickets
+# Az összes ticket listázása. (Alap esetben minden ticket; jogosultsági logika kiterjeszthető, pl. user csak a sajátját látja, admin mindent.)
 
-Válasz (200 OK):
+# Válasz (200 OK):
 
 ```bash
 {
@@ -447,10 +424,10 @@ Válasz (200 OK):
   ]
 }
 ```
-GET /tickets/{id}
-Információk lekérése egy adott ticketről, válaszokkal együtt.
+## GET /tickets/{id}
+## Információk lekérése egy adott ticketről, válaszokkal együtt.
 
-Válasz (200 OK):
+# Válasz (200 OK):
 
 ```bash
 {
@@ -484,7 +461,7 @@ Válasz (200 OK):
   }
 }
 ```
-Válasz (ha a ticket nem található – 404 Not Found):
+# Válasz (ha a ticket nem található – 404 Not Found):
 
 ```bash
 {
@@ -492,14 +469,14 @@ Válasz (ha a ticket nem található – 404 Not Found):
   "message": "Ticket not found"
 }
 ```
-PUT/PATCH /tickets/{id}
-Ticket adatainak frissítése.
+## PUT/PATCH /tickets/{id}
+## Ticket adatainak frissítése.
 
 PUT: minden mező kötelező (subject, description, priority, status)
 
 PATCH: csak a módosítani kívánt mezők.
 
-Kérés törzse (PUT):
+# Kérés törzse (PUT):
 
 ```bash
 {
@@ -509,14 +486,14 @@ Kérés törzse (PUT):
   "status": "in_progress"
 }
 ```
-Kérés törzse (PATCH):
+# Kérés törzse (PATCH):
 
 ```bash
 {
   "status": "closed"
 }
 ```
-Válasz (sikeres frissítés – 200 OK):
+# Válasz (sikeres frissítés – 200 OK):
 
 ```bash
 {
@@ -532,17 +509,16 @@ Válasz (sikeres frissítés – 200 OK):
 }
 ```
 Hibák:
-
+```bash
 422 Unprocessable Entity – érvénytelen mezők
 
 404 Not Found – ticket nem található
 
 401 Unauthorized – token érvénytelen
+```
+## DELETE /tickets/{id}
 
-DELETE /tickets/{id}
-Egy ticket soft delete törlése. A rekord fizikailag megmarad az adatbázisban, csak a deleted_at mező kerül kitöltésre.
-
-Válasz (sikeres törlés – 200 OK):
+# Válasz (sikeres törlés – 200 OK):
 
 ```bash
 {
@@ -550,7 +526,7 @@ Válasz (sikeres törlés – 200 OK):
   "message": "Ticket deleted successfully"
 }
 ```
-Válasz (ticket nem található – 404 Not Found):
+# Válasz (ticket nem található – 404 Not Found):
 
 ```bash
 {
@@ -558,8 +534,8 @@ Válasz (ticket nem található – 404 Not Found):
   "message": "Ticket not found"
 }
 ```
-POST /tickets/{id}/replies
-Új válasz hozzáadása egy tickethez (user vagy admin).
+## POST /tickets/{id}/replies
+# Új válasz hozzáadása egy tickethez (user vagy admin).
 
 Kérés törzse:
 
@@ -568,7 +544,7 @@ Kérés törzse:
   "message": "Kérlek próbálj meg egy másik böngészőt."
 }
 ```
-Válasz (sikeres létrehozás – 201 Created):
+# Válasz (sikeres létrehozás – 201 Created):
 
 ```bash
 {
@@ -587,7 +563,8 @@ Válasz (sikeres létrehozás – 201 Created):
   }
 }
 ```
-Összefoglaló táblázat
+### Összefoglaló táblázat
+---
 HTTP metódus	Útvonal	Jogosultság	Státuszkódok	Rövid leírás
 GET	/ping	Nyilvános	200 OK	API tesztelés
 POST	/register	Nyilvános	201, 422	Új felhasználó regisztrációja
@@ -600,10 +577,8 @@ GET	/tickets/{id}	Hitelesített	200, 404, 401	Ticket részletei válaszokkal egy
 PUT/PATCH	/tickets/{id}	Hitelesített	200, 422, 404, 401	Ticket frissítése
 DELETE	/tickets/{id}	Hitelesített	200, 404, 401	Ticket törlése (Soft Delete)
 POST	/tickets/{id}/replies	Hitelesített	201, 422, 404, 401	Új válasz egy tickethez
-Factory-k és seederek
-A felépítés a Payment példában látott Order/Payment factory-hez hasonló, de ticket domainre szabva.
-
-UserFactory (database/factories/UserFactory.php)
+---
+## UserFactory (database/factories/UserFactory.php)
 ```bash
 <?php
 
@@ -627,7 +602,7 @@ class UserFactory extends Factory
     }
 }
 ```
-TicketFactory (database/factories/TicketFactory.php)
+## TicketFactory (database/factories/TicketFactory.php)
 ```bash
 <?php
 
@@ -653,7 +628,7 @@ class TicketFactory extends Factory
     }
 }
 ```
-TicketReplyFactory (database/factories/TicketReplyFactory.php)
+## TicketReplyFactory (database/factories/TicketReplyFactory.php)
 ```bash
 <?php
 
@@ -678,7 +653,7 @@ class TicketReplyFactory extends Factory
     }
 }
 ```
-DatabaseSeeder (database/seeders/DatabaseSeeder.php)
+## DatabaseSeeder (database/seeders/DatabaseSeeder.php)
 ```bash
 <?php
 
@@ -696,8 +671,8 @@ class DatabaseSeeder extends Seeder
         // Admin felhasználó
         $admin = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('Admin_Secret_Pw2026!'),
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('Mate2007'),
             'role' => 'admin',
         ]);
 
@@ -717,16 +692,6 @@ class DatabaseSeeder extends Seeder
     }
 }
 ```
-Létrehozott adatok:
-
-1 admin felhasználó:  
-email: admin@example.com, jelszó: Admin_Secret_Pw2026!
-
-10 user felhasználó: magyar nevekkel (APP_FAKER_LOCALE=hu_HU)
-
-10–50 ticket: minden felhasználóhoz 1–5 ticket
-
-0–250 válasz: minden tickethez 0–5 válasz
 
 Seeder futtatása:
 
@@ -738,18 +703,10 @@ Adatbázis frissítése és újra feltöltése:
 ```bash
 php artisan migrate:fresh --seed
 ```
-Adatbázis diagram (szöveges leírás)
-Hasonlóan a payment példában használt erDiagram-hoz, itt a relációk:
 
-USERS ||--o{ TICKETS : owns
-
-TICKETS ||--o{ TICKET_REPLIES : has
-
-USERS ||--o{ TICKET_REPLIES : writes
-
-Megvalósítási útmutató
-I. Modul – Környezet beállítása
-1. Projekt létrehozása és függőségek telepítése
+### I. Modul – Környezet beállítása
+---
+## 1. Projekt létrehozása és függőségek telepítése
 
 ```bash
 composer create-project laravel/laravel SupportTicketsJWT
@@ -760,7 +717,7 @@ composer require tymon/jwt-auth
 php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
 php artisan jwt:secret
 ```
-2. .env fájl beállítása
+## 2. .env fájl beállítása
 
 ```bash
 DB_CONNECTION=mysql
@@ -774,8 +731,8 @@ DB_PASSWORD=
 APP_TIMEZONE=Europe/Budapest
 APP_FAKER_LOCALE=hu_HU
 ```
-3. Auth guard beállítása (config/auth.php)
-
+## 3. Auth guard beállítása (config/auth.php)
+---
 ```bash
 'guards' => [
     'api' => [
@@ -784,16 +741,14 @@ APP_FAKER_LOCALE=hu_HU
     ],
 ],
 ```
-II. Modul – Migrációk
-Users tábla bővítése role mezővel  
-A meglévő users migrációban vagy új migrációban:
-
+### II. Modul – Migrációk
+---
 ```bash
 Schema::table('users', function (Blueprint $table) {
     $table->string('role')->default('user');
 });
 ```
-Tickets tábla
+## Tickets tábla
 
 ```bash
 php artisan make:migration create_tickets_table
@@ -809,7 +764,7 @@ Schema::create('tickets', function (Blueprint $table) {
     $table->softDeletes();
 });
 ```
-Ticket_replies tábla
+## Ticket_replies tábla
 
 ```bash
 php artisan make:migration create_ticket_replies_table
@@ -823,13 +778,14 @@ Schema::create('ticket_replies', function (Blueprint $table) {
     $table->softDeletes();
 });
 ```
-Migrációk futtatása
+## Migrációk futtatása
 
 ```bash
 php artisan migrate
 ```
-III. Modul – Controller-ek és route-ok
-AuthController (app/Http/Controllers/AuthController.php)
+### III. Modul – Controller-ek és route-ok
+---
+## AuthController (app/Http/Controllers/AuthController.php)
 
 ```bash
 <?php
@@ -910,7 +866,7 @@ class AuthController extends Controller
     }
 }
 ```
-TicketController (app/Http/Controllers/TicketController.php)
+## TicketController (app/Http/Controllers/TicketController.php)
 
 ```bash
 <?php
@@ -1040,7 +996,7 @@ class TicketController extends Controller
     }
 }
 ```
-TicketReplyController (app/Http/Controllers/TicketReplyController.php)
+## TicketReplyController (app/Http/Controllers/TicketReplyController.php)
 
 ```bash
 <?php
@@ -1089,7 +1045,7 @@ class TicketReplyController extends Controller
     }
 }
 ```
-Route-ok beállítása (routes/api.php)
+## Route-ok beállítása (routes/api.php)
 
 ```bash
 <?php
@@ -1126,9 +1082,8 @@ Route::middleware('auth:api')->group(function () {
 });
 ```
 Tesztelés
-A felépítés a Payment példában látható AuthTest és PaymentTest mintáját követi, de ticket domainre alkalmazva.
 
-AuthTest (tests/Feature/AuthTest.php – példa)
+### AuthTest (tests/Feature/AuthTest.php)
 ```bash
 <?php
 
@@ -1313,30 +1268,26 @@ php artisan test
 Várt eredmény: minden Auth és Ticket Feature teszt PASS, hasonló kimenettel, mint a payment projekt esetén.
 
 Telepítési útmutató
-1. Adatbázis konfigurálása:
 
-Hozz létre egy supportPlatform nevű adatbázist
-
-Állítsd be a .env fájlban az adatbázis kapcsolatot
-
-2. Függőségek telepítése és migrációk + seed:
+## 1. Függőségek telepítése és migrációk + seed:
 
 ```bash
 composer install
 php artisan migrate
 php artisan db:seed
 ```
-3. Fejlesztői szerver indítása:
+## 2. Fejlesztői szerver indítása:
 
 ```bash
 php artisan serve
 ```
-4. API elérése:
+## 3. API elérése:
 ```bash
 Base URL: http://127.0.0.1:8000/api
 ```
-Teszt admin felhasználó:
+# Teszt admin felhasználó:
 ```bash
-admin@example.com / Admin_Secret_Pw2026!
+admin@gmail.com / Mate2007!
 ```
+
 
