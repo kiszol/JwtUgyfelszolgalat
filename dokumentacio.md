@@ -219,20 +219,30 @@ A Content-Type és az Accept header kulcsok mindig application/json formátumúa
   "message": "Unauthenticated."
 }
 ```
-### Nem védett végpontok:
+### Nem védett végpontok
 ---
-GET /ping – API teszteléshez
-POST /register – Regisztrációhoz
-POST /login – Bejelentkezéshez (JWT token generálása)
-# Védett végpontok: 
-POST /logout – Kijelentkezés
-GET /me – Saját felhasználói adatok lekérése
-GET /tickets – Összes ticket listázása
-POST /tickets – Új ticket létrehozása
-GET /tickets/{id} – Egy ticket megtekintése a válaszokkal együtt
-PUT/PATCH /tickets/{id} – Ticket módosítása (pl. státusz, prioritás)
-DELETE tickets/{id} – Ticket törlése (Soft Delete)
-POST tickets/{id}/replies – Új válasz hozzáadása egy tickethez
+
+| HTTP metódus | Útvonal     | Leírás                                      |
+|--------------|-------------|----------------------------------------------|
+| GET          | /ping       | API tesztelés                                |
+| POST         | /register   | Regisztráció                                 |
+| POST         | /login      | Bejelentkezés (JWT token generálása)         |
+
+
+### Védett végpontok
+---
+
+| HTTP metódus | Útvonal                   | Leírás                                              |
+|--------------|----------------------------|------------------------------------------------------|
+| POST         | /logout                   | Kijelentkezés                                       |
+| GET          | /me                       | Saját felhasználói adatok lekérése                  |
+| GET          | /tickets                  | Összes ticket listázása                             |
+| POST         | /tickets                  | Új ticket létrehozása                               |
+| GET          | /tickets/{id}             | Ticket megtekintése a válaszokkal együtt            |
+| PUT/PATCH    | /tickets/{id}             | Ticket módosítása (státusz, prioritás stb.)         |
+| DELETE       | /tickets/{id}             | Ticket törlése (Soft Delete)                        |
+| POST         | /tickets/{id}/replies     | Új válasz hozzáadása egy tickethez                  |
+
 
 ### Hibák
 ---
@@ -560,18 +570,21 @@ Kérés törzse:
 ```
 ### Összefoglaló táblázat
 ---
-HTTP metódus	Útvonal	Jogosultság	Státuszkódok	Rövid leírás
-GET	/ping	Nyilvános	200 OK	API tesztelés
-POST	/register	Nyilvános	201, 422	Új felhasználó regisztrációja
-POST	/login	Nyilvános	200, 422	Bejelentkezés, JWT token kiadása
-POST	/logout	Hitelesített	200, 401	Kijelentkezés
-GET	/me	Hitelesített	200, 401	Saját profil lekérése
-GET	/tickets	Hitelesített	200, 401	Összes ticket listázása
-POST	/tickets	Hitelesített	201, 422, 401	Új ticket létrehozása
-GET	/tickets/{id}	Hitelesített	200, 404, 401	Ticket részletei válaszokkal együtt
-PUT/PATCH	/tickets/{id}	Hitelesített	200, 422, 404, 401	Ticket frissítése
-DELETE	/tickets/{id}	Hitelesített	200, 404, 401	Ticket törlése (Soft Delete)
-POST	/tickets/{id}/replies	Hitelesített	201, 422, 404, 401	Új válasz egy tickethez
+
+| HTTP metódus | Útvonal                 | Jogosultság    | Státuszkódok              | Rövid leírás                           |
+|--------------|--------------------------|-----------------|----------------------------|-----------------------------------------|
+| GET          | /ping                   | Nyilvános       | 200 OK                     | API tesztelés                           |
+| POST         | /register               | Nyilvános       | 201, 422                   | Új felhasználó regisztrációja           |
+| POST         | /login                  | Nyilvános       | 200, 422                   | Bejelentkezés, JWT token kiadása        |
+| POST         | /logout                 | Hitelesített    | 200, 401                   | Kijelentkezés                           |
+| GET          | /me                     | Hitelesített    | 200, 401                   | Saját profil lekérése                   |
+| GET          | /tickets                | Hitelesített    | 200, 401                   | Összes ticket listázása                 |
+| POST         | /tickets                | Hitelesített    | 201, 422, 401              | Új ticket létrehozása                   |
+| GET          | /tickets/{id}           | Hitelesített    | 200, 404, 401              | Ticket részletei válaszokkal együtt     |
+| PUT/PATCH    | /tickets/{id}           | Hitelesített    | 200, 422, 404, 401         | Ticket frissítése                       |
+| DELETE       | /tickets/{id}           | Hitelesített    | 200, 404, 401              | Ticket törlése (Soft Delete)            |
+| POST         | /tickets/{id}/replies   | Hitelesített    | 201, 422, 404, 401         | Új válasz egy tickethez                 |
+
 ---
  UserFactory (database/factories/UserFactory.php)
 ```bash
@@ -1260,4 +1273,5 @@ class TicketTest extends TestCase
 ```bash
 php artisan test
 ```
+
 
