@@ -259,7 +259,7 @@ A Content-Type és az Accept header kulcsok mindig application/json formátumúa
 ---
  POST /register
 
- Új felhasználó regisztrációja. Az új felhasználók regisztráció után külön be kell jelentkezzenek token megszerzéséhez (JWT). A válasz hasonló felépítésű, mint a payment példában a regisztráció.
+ Új felhasználó regisztrációja. Az új felhasználók regisztráció után külön be kell jelentkezzenek token megszerzéséhez (JWT).
 
  Kérés törzse:
 
@@ -1274,6 +1274,7 @@ class TicketTest extends TestCase
 ```bash
 php artisan test
 ```
+
 
 
 
