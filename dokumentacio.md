@@ -145,7 +145,7 @@ class User extends Authenticatable implements JWTSubject
 }
 ```
 
-Ticket model (app/Models/Ticket.php)
+### Ticket model (`app/Models/Ticket.php`)
 ```bash
 <?php
 
@@ -215,7 +215,8 @@ class TicketReply extends Model
     }
 }
 ```
-API végpontok
+## API végpontok
+---
 A Content-Type és az Accept header kulcsok mindig application/json formátumúak legyenek.
 Érvénytelen vagy hiányzó token esetén a backendnek 401 Unauthorized választ kell visszaadnia:
 
@@ -224,31 +225,20 @@ A Content-Type és az Accept header kulcsok mindig application/json formátumúa
   "message": "Unauthenticated."
 }
 ```
-Nem védett végpontok
-GET /ping – API teszteléshez
-
-POST /register – Regisztrációhoz
-
-POST /login – Bejelentkezéshez (JWT token generálása)
-
-Védett végpontok (Bearer Token szükséges)
-POST /logout – Kijelentkezés
-
-GET /me – Saját felhasználói adatok lekérése
-
-GET /tickets – Összes ticket listázása
-
-POST /tickets – Új ticket létrehozása
-
-GET /tickets/{id} – Egy ticket megtekintése a válaszokkal együtt
-
-PUT/PATCH /tickets/{id} – Ticket módosítása (pl. státusz, prioritás)
-
-DELETE /tickets/{id} – Ticket törlése (Soft Delete)
-
-POST /tickets/{id}/replies – Új válasz hozzáadása egy tickethez
-
-(Opció: GET /tickets/{id}/replies – adott ticket válaszainak listázása – ha szükséges)
+# Nem védett végpontok
+---
+|GET |/ping – API teszteléshez
+|POST |/register – Regisztrációhoz
+|POST |/login – Bejelentkezéshez (JWT token generálása)
+# Védett végpontok 
+|POST |/logout – Kijelentkezés
+|GET |/me – Saját felhasználói adatok lekérése
+|GET |/tickets – Összes ticket listázása
+|POST /tickets |– Új ticket létrehozása
+|GET |/tickets/{id} – Egy ticket megtekintése a válaszokkal együtt
+|PUT/PATCH |/tickets/{id} – Ticket módosítása (pl. státusz, prioritás)
+|DELETE |/tickets/{id} – Ticket törlése (Soft Delete)
+|POST |/tickets/{id}/replies – Új válasz hozzáadása egy tickethez
 
 Soft Delete funkciók
 A rendszer Soft Delete megközelítést használ a ticketek és ticket válaszok törlésekor, hasonlóan az orders/payments példához.
@@ -1349,3 +1339,4 @@ Teszt admin felhasználó:
 ```bash
 admin@example.com / Admin_Secret_Pw2026!
 ```
+
